@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para ti gorda</title>
+
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background: url("fondo.png") no-repeat center center;
+  background-size: cover;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* MENSAJE INICIAL */
+#initialMessage {
+  position: absolute;
+  top: 35%;
+  width: 100%;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffb3c6;
+  text-shadow: 0 0 10px #7a003c;
+}
+
+/* BOTONES */
+button {
+  width: 80vw;
+  max-width: 320px;
+  padding: 18px;
+  font-size: 22px;
+  border-radius: 40px;
+  border: none;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+#yesBtn { background: #ffb3c6; color: #7a003c; font-weight: bold; }
+#noBtn { background: #6c757d; color: white; }
+
+/* MENSAJE FINAL */
+#finalMessage {
+  display: none;
+  position: absolute;
+  top: 40%;
+  width: 100%;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffb3c6;
+  text-shadow: 0 0 10px #7a003c;
+}
+
+/* FRASES Y FOTOS */
+.star {
+  position: absolute;
+  top: -120px;
+  font-weight: 300;
+  color: rgba(255, 240, 255, 0.95);
+  text-shadow: 0 0 12px rgba(255, 182, 193, 0.9);
+  animation: fall linear forwards;
+}
+.photo {
+  position: absolute;
+  top: -150px;
+  width: 95px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255, 105, 180, 0.9);
+  animation: fall linear forwards;
+}
+
+/* ANIMACIÓN DE CAÍDA */
+@keyframes fall {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(120vh); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- MUSICA -->
+<audio id="music" loop>
+  <source src="anchor-novo-amor.mp3" type="audio/mpeg">
+</audio>
+
+<!-- MENSAJE INICIAL -->
+<div id="initialMessage">
+  ¿Quieres ser mi San Valentín?
+  <div class="buttons">
+    <button id="yesBtn" onclick="startLove()">Sí 💘</button>
+    <button id="noBtn" onclick="growYes()">No 😢</button>
+  </div>
+</div>
+
+<!-- MENSAJE FINAL -->
+<div id="finalMessage">
+  Te amo con el alma porque el alma nunca muere 💖
+</div>
+
+<script>
+let yesSize = 1;
+
+// Mensajes
+const messages = [
+  "Desafiaría al destino por estar contigo",
+  "Quiero estar contigo todos los días de mi vida",
+  "Te amo mucho rubia",
+  "Te amo mucho gorda",
+  "Te amo mucho estrellita",
+  "Te amo mucho niña tikilina",
+  "Te amo mucho princesa",
+  "Me gustan las ✨ porque siempre las veo en tus ojos",
+  "Eres lo más bonito que he tenido en mi vida",
+  "Por más 14 a tu lado",
+  "Eres mi Rapunzel",
+];
+
+// Fotos
+const photos = [
+  "fotos/1.jpg","fotos/2.jpg","fotos/3.jpg","fotos/4.jpg","fotos/5.jpg",
+  "fotos/6.jpg","fotos/7.jpg","fotos/8.jpg","fotos/9.jpg","fotos/10.jpg"
+];
+
+function growYes() {
+  yesSize += 0.35;
+  document.getElementById("yesBtn").style.transform = `scale(${yesSize})`;
+  if (yesSize > 2.8) document.getElementById("noBtn").style.display = "none";
+}
+
+function startLove() {
+  document.getElementById("initialMessage").style.display = "none";
+
+  // Reproducir música al dar Sí
+  const music = document.getElementById("music");
+  music.volume = 0.6;
+  music.play();
+
+  startRain();
+
+  // Mostrar mensaje final después de 8 segundos
+  setTimeout(() => {
+    document.getElementById("finalMessage").style.display = "block";
+  }, 8000);
+}
+
+function startRain() {
+  // Intervalo para que caigan los elementos uno a uno
+  setInterval(() => {
+    const isPhoto = Math.random() < 0.5;
+
+    if (isPhoto) {
+      const img = document.createElement("img");
+      img.src = photos[Math.floor(Math.random() * photos.length)];
+      img.className = "photo";
+
+      // Fotos solo por laterales con margen de 5%
+      img.style.left = Math.random() < 0.5 ? "5%" : "calc(100% - 5% - 95px)";
+      img.style.animationDuration = Math.random() * 4 + 5 + "s";
+
+      document.body.appendChild(img);
+      setTimeout(() => img.remove(), 10000);
+
+    } else {
+      const star = document.createElement("div");
+      star.className = "star";
+      star.innerText = messages[Math.floor(Math.random() * messages.length)];
+
+      // Centrar los mensajes un poco más, evitando bordes
+      const minX = 20;  // margen izquierdo
+      const maxX = window.innerWidth - 220; // margen derecho
+      star.style.left = Math.random() * (maxX - minX) + minX + "px";
+
+      star.style.fontSize = Math.random() * 18 + 14 + "px";
+      star.style.animationDuration = Math.random() * 4 + 5 + "s";
+
+      document.body.appendChild(star);
+      setTimeout(() => star.remove(), 10000);
+    }
+  }, 500); // cada 0.5s un elemento
+}
+</script>
+
+</body>
+</html>
